@@ -20,55 +20,74 @@
         var isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);
 
         var notice_openBrowser = "<h2>请点击右上角，通过浏览器打开本页面。</h2><br />不得不看的内容，保存二维码到本地：<b style=\"color:red\">浏览器扫码</b>"
-
-
-        $.ajax({
-            url: "https://api.jbxes.com/data-center/data/url/getUrl?urlId="+originalParam,
-            type: "GET", // 也可以用POST，根据后端接口要求调整 
-            dataType: "json",
-            timeout: 10000, // 超时时间10秒
-            success: function (response) {
-                if (response.code == 0 && response.msg == 'success') {
-                    var realTargetUrl = response.fhUrl;
-                    // 验证URL有效性（简单判断是否以http开头）
-                    if (realTargetUrl.indexOf('http') === 0) {
-                        // 判断是不是在微信客户端打开
-                        if (isWeixin || isQQ) {
-                            // 判断是在Android的微信客户端还是Ios的微信客户端
-                            if (isAndroid) {
-                                document.getElementById("tips").innerHTML = notice_openBrowser;
-                            } else if (isIos) {
-                                document.getElementById("tips").innerHTML = notice_openBrowser;
+        
+        if(originalParam.indexOf('http') != -1){
+            if (isWeixin || isQQ) {
+                // 判断是在Android的微信客户端还是Ios的微信客户端
+                if (isAndroid) {
+                    document.getElementById("tips").innerHTML = notice_openBrowser;
+                } else if (isIos) {
+                    document.getElementById("tips").innerHTML = notice_openBrowser;
+                } else {
+                    document.getElementById("tips").innerHTML = notice_openBrowser;
+                }
+            } else {
+                // 不是微信客户端，直接可以访问链接
+                if (realTargetUrl == url) {
+                    realTargetUrl = "https://www.baidu.com";
+                }
+                location.href = realTargetUrl;
+            }
+        }else{
+            $.ajax({
+                url: "https://api.jbxes.com/data-center/data/url/getUrl?urlId="+originalParam,
+                type: "GET", // 也可以用POST，根据后端接口要求调整 
+                dataType: "json",
+                timeout: 10000, // 超时时间10秒
+                success: function (response) {
+                    if (response.code == 0 && response.msg == 'success') {
+                        var realTargetUrl = response.fhUrl;
+                        // 验证URL有效性（简单判断是否以http开头）
+                        if (realTargetUrl.indexOf('http') === 0) {
+                            // 判断是不是在微信客户端打开
+                            if (isWeixin || isQQ) {
+                                // 判断是在Android的微信客户端还是Ios的微信客户端
+                                if (isAndroid) {
+                                    document.getElementById("tips").innerHTML = notice_openBrowser;
+                                } else if (isIos) {
+                                    document.getElementById("tips").innerHTML = notice_openBrowser;
+                                } else {
+                                    document.getElementById("tips").innerHTML = notice_openBrowser;
+                                }
                             } else {
-                                document.getElementById("tips").innerHTML = notice_openBrowser;
+                                // 不是微信客户端，直接可以访问链接
+                                if (realTargetUrl == url) {
+                                    realTargetUrl = "https://www.baidu.com";
+                                }
+                                location.href = realTargetUrl;
                             }
                         } else {
-                            // 不是微信客户端，直接可以访问链接
-                            if (realTargetUrl == url) {
-                                realTargetUrl = "https://www.baidu.com";
-                            }
-                            location.href = realTargetUrl;
+                            $('#tips').removeClass('loading').addClass('error').html("链接无效，请重试");
                         }
                     } else {
-                        $('#tips').removeClass('loading').addClass('error').html("链接无效，请重试");
+                        $('#tips').removeClass('loading').addClass('error').html("数据异常：" + (response.msg || '未知错误'));
                     }
-                } else {
-                    $('#tips').removeClass('loading').addClass('error').html("数据异常：" + (response.msg || '未知错误'));
+                },
+                error: function (xhr, status, error) {
+                    // 错误处理（超时、网络错误、接口报错等）
+                    var errorMsg = "";
+                    if (status === "timeout") {
+                        errorMsg = "请求超时，请检查网络";
+                    } else if (status === "error") {
+                        errorMsg = "网络错误，无法连接后端";
+                    } else {
+                        errorMsg = "请求失败：" + error;
+                    }
+                    $('#tips').removeClass('loading').addClass('error').html(errorMsg);
                 }
-            },
-            error: function (xhr, status, error) {
-                // 错误处理（超时、网络错误、接口报错等）
-                var errorMsg = "";
-                if (status === "timeout") {
-                    errorMsg = "请求超时，请检查网络";
-                } else if (status === "error") {
-                    errorMsg = "网络错误，无法连接后端";
-                } else {
-                    errorMsg = "请求失败：" + error;
-                }
-                $('#tips').removeClass('loading').addClass('error').html(errorMsg);
-            }
-        });
+            });
+        }
+        
     </script>
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
     <script>LA.init({ id: "K8YSQIj3WDtj9gG6", ck: "K8YSQIj3WDtj9gG6" })</script>
