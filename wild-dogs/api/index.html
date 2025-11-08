@@ -33,10 +33,10 @@
                 }
             } else {
                 // 不是微信客户端，直接可以访问链接
-                if (realTargetUrl == url) {
-                    realTargetUrl = "https://www.baidu.com";
+                if (originalParam == url) {
+                    originalParam = "https://www.baidu.com";
                 }
-                location.href = realTargetUrl;
+                location.href = originalParam;
             }
         }else{
             $.ajax({
@@ -94,3 +94,4 @@
 </body>
 
 </html>
+
