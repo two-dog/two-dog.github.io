@@ -20,7 +20,7 @@
     <div id="tips" style="font-size:25px;text-align: center;line-height: 50px;"></div>
     <script>
         var url = document.location.toString();
-        var originalParam = currentUrl.indexOf('=') > -1 ? currentUrl.slice(currentUrl.indexOf('=') + 1) : '';
+        var originalParam = url.indexOf('=') > -1 ? url.slice(url.indexOf('=') + 1) : '';
         var ua = navigator.userAgent.toLowerCase();
         var isQQ = ua.indexOf('qq') != -1;
         var isWeixin = ua.indexOf('micromessenger') != -1;
@@ -117,6 +117,7 @@
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"K8YSQIj3WDtj9gG6",ck:"K8YSQIj3WDtj9gG6"})</script>
 </body>
 </html>
+
 
 
 
