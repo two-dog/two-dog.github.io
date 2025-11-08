@@ -31,7 +31,7 @@
 
 
         $.ajax({
-            url: "https://api.jbxes.com/data-center/data/url/getUrl?url="+originalParam,
+            url: "https://api.jbxes.com/data-center/data/url/getUrl?urlId="+originalParam,
             type: "GET", // 也可以用POST，根据后端接口要求调整
             dataType: "json",
             timeout: 10000, // 超时时间10秒
@@ -58,10 +58,10 @@
                             location.href = realTargetUrl;
                         }
                     } else {
-                        $('#tips').removeClass('loading').addClass('error').html("后端返回链接无效，请重试");
+                        $('#tips').removeClass('loading').addClass('error').html("链接无效，请重试");
                     }
                 } else {
-                    $('#tips').removeClass('loading').addClass('error').html("后端返回数据异常：" + (response.msg || '未知错误'));
+                    $('#tips').removeClass('loading').addClass('error').html("数据异常：" + (response.msg || '未知错误'));
                 }
             },
             error: function (xhr, status, error) {
@@ -117,6 +117,7 @@
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"K8YSQIj3WDtj9gG6",ck:"K8YSQIj3WDtj9gG6"})</script>
 </body>
 </html>
+
 
 
 
